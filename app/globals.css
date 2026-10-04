@@ -3,20 +3,323 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 44, 44, 44;
-  --background-start-rgb: 250, 248, 245;
-  --background-end-rgb: 244, 239, 230;
+  --foreground-rgb: 51, 65, 85;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 241, 245, 249;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      rgb(var(--background-start-rgb)),
-      rgb(var(--background-end-rgb))
-    );
+  background-color: #f1f5f9;
   min-height: 100vh;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   PALETA CINZA E AMARELO BEM CLARO: CENÁRIO E ENVELOPE
+   ========================================================================== */
+
+.invitation-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem 1rem;
+  overflow-x: hidden;
+  background-color: #f1f5f9;
+  background-image:
+    radial-gradient(ellipse 65% 55% at 50% 30%, rgba(254, 252, 232, 0.95) 0%, rgba(241, 245, 249, 0.7) 50%, #e2e8f0 100%),
+    repeating-linear-gradient(45deg, rgba(71, 85, 105, 0.015) 0 1px, transparent 1px 12px);
+}
+
+/* Container da Animação do Envelope */
+.envelope-scene {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1200px;
+  transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: scene-fade-in 450ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.envelope-scene.is-fading {
+  opacity: 0;
+  transform: translateY(22px) scale(0.95);
+  pointer-events: none;
+}
+
+.envelope-wrapper {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  filter: drop-shadow(0 20px 25px rgba(51, 65, 85, 0.16)) drop-shadow(0 8px 10px rgba(51, 65, 85, 0.08));
+}
+
+/* Base traseira do envelope (cinza sofisticado) */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #475569 0%, #334155 100%);
+  z-index: 1;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.18), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Forro interior (amarelo bem claro acetinado) */
+.envelope-lining {
+  position: absolute;
+  inset: 8px;
+  border-radius: 10px;
+  background: linear-gradient(175deg, #fffdf5 0%, #fefce8 45%, #fef9c3 100%);
+  z-index: 2;
+  border: 1px solid rgba(254, 240, 138, 0.7);
+  box-shadow: inset 0 0 12px rgba(254, 240, 138, 0.3);
+}
+
+/* Carta / Convite que desliza para cima */
+.envelope-letter {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  height: 242px;
+  background: #fffdf5;
+  background-image: linear-gradient(180deg, #fffef7 0%, #fefce8 65%, #fef9c3 100%);
+  border: 1px solid #fef08a;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(51, 65, 85, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  transform: translateY(0);
+  transition: transform 950ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 950ms ease, z-index 0ms 450ms;
+}
+
+.envelope-letter-border {
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed rgba(202, 138, 4, 0.35);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.letter-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #854d0e;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.letter-title {
+  font-family: Georgia, Cambria, serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: #1e293b;
+  margin: 0.2rem 0;
+  line-height: 1.15;
+}
+
+.letter-subtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.letter-ornament {
+  margin-top: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Bolso da frente do envelope (cinza) */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(155deg, #64748b 0%, #475569 50%, #334155 100%);
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  z-index: 4;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+.envelope-pocket-crease-left {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 50% 55%, 0 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.12) 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.envelope-pocket-crease-right {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(100% 0, 50% 55%, 100% 100%);
+  background: linear-gradient(225deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.18) 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Aba superior triangular (3D flip) */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  z-index: 5;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: rotateX(0deg);
+  transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1), z-index 0ms 380ms;
+}
+
+.envelope-flap-front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(175deg, #718096 0%, #64748b 45%, #475569 100%);
+  backface-visibility: hidden;
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.2);
+}
+
+.envelope-flap-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(175deg, #fffdf5 0%, #fefce8 50%, #fef9c3 100%);
+  border: 1px solid rgba(254, 240, 138, 0.8);
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+}
+
+/* Selo de cera / lacre (amarelo claro e dourado) */
+.envelope-seal {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffde7 0%, #fef08a 40%, #eab308 100%);
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.35), inset 0 2px 2px rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(254, 240, 138, 0.9);
+  z-index: 6;
+  transition: opacity 450ms ease, transform 450ms ease;
+}
+
+/* ==========================================================================
+   TRANSIÇÕES CONTROLADAS POR ESTADO (DURAÇÃO TOTAL: 3 SEGUNDOS)
+   ========================================================================== */
+
+/* 1. Ao iniciar abertura: aba gira 180° e selo desaparece */
+.is-opening .envelope-flap,
+.is-open .envelope-flap,
+.is-fading .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.is-opening .envelope-seal,
+.is-open .envelope-seal,
+.is-fading .envelope-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.65);
+  pointer-events: none;
+}
+
+/* 2. Carta desliza para cima */
+.is-open .envelope-letter,
+.is-fading .envelope-letter {
+  transform: translateY(-135px);
+  z-index: 6;
+  box-shadow: 0 20px 35px rgba(51, 65, 85, 0.22);
+}
+
+@keyframes scene-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   CARTÃO FINAL REVELADO (FORMULÁRIO DE CONFIRMAÇÃO)
+   ========================================================================== */
+
+.invitation-card-container {
+  width: min(100%, 520px);
+  animation: card-spring-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.invitation-card {
+  background: #fffdf5;
+  background-image: linear-gradient(180deg, #fffef7 0%, #fefce8 45%, #fffdf5 100%);
+  border: 1px solid #fef08a;
+  border-radius: 1.5rem;
+  padding: 2.25rem clamp(1.25rem, 5vw, 2.75rem);
+  box-shadow:
+    0 0 0 1px rgba(254, 240, 138, 0.5),
+    0 24px 48px -12px rgba(51, 65, 85, 0.16),
+    0 8px 16px -6px rgba(51, 65, 85, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.invitation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #cbd5e1 0%, #fef08a 35%, #eab308 50%, #fef08a 65%, #cbd5e1 100%);
+}
+
+@keyframes card-spring-in {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsividade Mobile */
+@media (max-width: 420px) {
+  .envelope-wrapper {
+    height: 240px;
+  }
+  .envelope-letter {
+    height: 215px;
+    padding: 1.25rem 0.75rem;
+  }
+  .letter-title {
+    font-size: 1.45rem;
+  }
+  .is-open .envelope-letter,
+  .is-fading .envelope-letter {
+    transform: translateY(-115px);
+  }
 }

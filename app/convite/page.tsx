@@ -13,11 +13,13 @@ function ConviteQueryContent() {
 
 export default function ConviteQueryPage() {
   return (
-    <main className="min-h-screen py-10 px-4 sm:px-6 flex items-center justify-center">
-      <div className="w-full max-w-lg bg-white/90 backdrop-blur-sm p-6 sm:p-10 rounded-2xl shadow-sm border border-champagne-200">
-        <Suspense fallback={<div className="text-center py-8 text-stone-500">Carregando convite...</div>}>
-          <ConviteQueryContent />
-        </Suspense>
+    <main className="invitation-page">
+      <div className="invitation-card-container">
+        <div className="invitation-card">
+          <Suspense fallback={<div className="text-center py-8 text-slate-500">Carregando convite...</div>}>
+            <ConviteQueryContent />
+          </Suspense>
+        </div>
       </div>
     </main>
   );

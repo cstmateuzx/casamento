@@ -11,9 +11,7 @@ interface InviteFormProps {
 
 export default function InviteForm({ convite, nomeEvento = 'Nosso Casamento' }: InviteFormProps) {
   const [nome, setNome] = useState('');
-  const [acompanhante1, setAcompanhante1] = useState('');
-  const [acompanhante2, setAcompanhante2] = useState('');
-  const [acompanhante3, setAcompanhante3] = useState('');
+  const [acompanhantes, setAcompanhantes] = useState('');
   const [presenca, setPresenca] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -41,7 +39,8 @@ export default function InviteForm({ convite, nomeEvento = 'Nosso Casamento' }: 
     setIsSubmitting(true);
 
     // Formatar acompanhantes (Seção 4)
-    const listaAcompanhantes = [acompanhante1, acompanhante2, acompanhante3]
+    const listaAcompanhantes = acompanhantes
+      .split('\n')
       .map(item => item.trim())
       .filter(item => item.length > 0);
 
@@ -104,32 +103,15 @@ export default function InviteForm({ convite, nomeEvento = 'Nosso Casamento' }: 
         <label className="block text-sm font-medium text-stone-700 mb-1.5">
           Quem irá com você? <span className="text-xs font-normal text-stone-400">(Acompanhantes)</span>
         </label>
-        <div className="space-y-2">
-          <input
-            type="text"
-            value={acompanhante1}
-            onChange={(e) => setAcompanhante1(e.target.value)}
-            placeholder="Nome do acompanhante 1 (opcional)"
-            disabled={isSubmitting}
-            className="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-champagne-300 focus:border-transparent transition text-sm disabled:bg-stone-50"
-          />
-          <input
-            type="text"
-            value={acompanhante2}
-            onChange={(e) => setAcompanhante2(e.target.value)}
-            placeholder="Nome do acompanhante 2 (opcional)"
-            disabled={isSubmitting}
-            className="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-champagne-300 focus:border-transparent transition text-sm disabled:bg-stone-50"
-          />
-          <input
-            type="text"
-            value={acompanhante3}
-            onChange={(e) => setAcompanhante3(e.target.value)}
-            placeholder="Nome do acompanhante 3 (opcional)"
-            disabled={isSubmitting}
-            className="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-champagne-300 focus:border-transparent transition text-sm disabled:bg-stone-50"
-          />
-        </div>
+        <textarea
+          id="acompanhantes"
+          rows={3}
+          value={acompanhantes}
+          onChange={(e) => setAcompanhantes(e.target.value)}
+          placeholder="Digite um nome por linha (opcional)"
+          disabled={isSubmitting}
+          className="w-full px-4 py-3 rounded-xl border border-stone-200 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-champagne-300 focus:border-transparent transition text-sm disabled:bg-stone-50 resize-y"
+        />
       </div>
 
       {/* Campo: Você irá comparecer? */}
@@ -207,12 +189,6 @@ export default function InviteForm({ convite, nomeEvento = 'Nosso Casamento' }: 
           'Confirmar presença'
         )}
       </button>
-
-      <div className="text-center">
-        <span className="text-[11px] text-stone-400 tracking-wider">
-          Link do convite: #{convite}
-        </span>
-      </div>
     </form>
   );
 }

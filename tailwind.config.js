@@ -9,13 +9,13 @@ module.exports = {
     extend: {
       colors: {
         champagne: {
-          50: '#FAF8F5',
-          100: '#F4EFE6',
-          200: '#E8DCCB',
-          300: '#DBC7AC',
-          400: '#C8A982',
-          500: '#B68E5C',
-          600: '#9B7443',
+          50: '#FEFDF8',
+          100: '#FEF9C3', // amarelo bem claro
+          200: '#FEF08A', // amarelo suave
+          300: '#FDE047',
+          400: '#EAB308',
+          500: '#CA8A04',
+          600: '#A16207',
         },
         sage: {
           50: '#F4F7F4',

@@ -20,9 +20,11 @@ export default function ConvitePage({ params }: ConvitePageProps) {
   const conviteId = decodeURIComponent(params.convite || 'geral');
 
   return (
-    <main className="min-h-screen py-10 px-4 sm:px-6 flex items-center justify-center">
-      <div className="w-full max-w-lg bg-white/90 backdrop-blur-sm p-6 sm:p-10 rounded-2xl shadow-sm border border-champagne-200">
-        <InviteForm convite={conviteId} />
+    <main className="invitation-page">
+      <div className="invitation-card-container">
+        <div className="invitation-card">
+          <InviteForm convite={conviteId} />
+        </div>
       </div>
     </main>
   );
