@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || '';
+const GOOGLE_SCRIPT_URL = (process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || '').trim();
 
 export const isGoogleSheetsConfigured = Boolean(
   GOOGLE_SCRIPT_URL &&
@@ -12,25 +12,32 @@ export async function salvarConfirmacao(dados: {
   acompanhantes: string;
   presenca: boolean;
 }): Promise<{ success: boolean; error?: string }> {
-  if (isGoogleSheetsConfigured) {
-    try {
-      // mode: 'no-cors' com Content-Type text/plain evita bloqueio de CORS nos redirecionamentos do Google
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-        body: JSON.stringify(dados),
-      });
-
-      return { success: true };
-    } catch (err) {
-      console.error('Erro ao enviar confirmação para Google Sheets:', err);
-      return { success: false, error: 'Não foi possível registrar sua resposta. Tente novamente.' };
-    }
+  if (!isGoogleSheetsConfigured) {
+    console.error(
+      'Google Apps Script URL não configurada ou inválida. URL recebida:',
+      GOOGLE_SCRIPT_URL
+    );
+    return {
+      success: false,
+      error: 'A planilha ainda não foi conectada corretamente. Verifique se o link configurado é o do Google Apps Script (iniciado com https://script.google.com/macros/s/ e terminado em /exec).',
+    };
   }
 
-  // Fallback caso ainda não configurado
-  return { success: true };
+  try {
+    // mode: 'no-cors' com Content-Type text/plain evita bloqueio de CORS nos redirecionamentos do Google
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: JSON.stringify(dados),
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error('Erro ao enviar confirmação para Google Sheets:', err);
+    return { success: false, error: 'Não foi possível registrar sua resposta. Tente novamente.' };
+  }
 }
+
